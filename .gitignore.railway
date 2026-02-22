@@ -1,0 +1,2 @@
+# Ignorar composer.lock en producción
+composer.lock
