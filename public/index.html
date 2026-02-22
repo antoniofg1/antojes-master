@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Antojes - Interfaz de Prueba</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header p { font-size: 1.2em; opacity: 0.9; }
+        .content { padding: 30px; }
+        .section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 600;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border 0.3s;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn:active {
+            transform: translateY(0);
+        }
+        .response {
+            background: #282c34;
+            color: #61dafb;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .success { border-left-color: #28a745; }
+        .error { border-left-color: #dc3545; }
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196f3;
+        }
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            background: #28a745;
+            color: white;
+            border-radius: 5px;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+        .endpoints {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .endpoint-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .endpoint-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .endpoint-card h3 {
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        .endpoint-card p {
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 API Antojes</h1>
+            <p>Interfaz de Prueba - Chat Geolocalizado</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">
+                <span class="badge">Servidor: http://localhost:8000</span>
+            </p>
+        </div>
+
+        <div class="content">
+            <div class="info">
+                <strong>ℹ️ Información:</strong> Todos los endpoints usan formato <code>{data, error}</code>
+                <br>
+                <strong>🔑 API Key:</strong> test-api-key (requerida en todos los endpoints)
+            </div>
+
+            <!-- Login Section -->
+            <div class="section">
+                <h2>🔐 1. Login</h2>
+                <div class="input-group">
+                    <label>Email:</label>
+                    <input type="email" id="email" value="maria.garcia@valencia.com" placeholder="email@ejemplo.com">
+                </div>
+                <div class="input-group">
+                    <label>Password:</label>
+                    <input type="password" id="password" value="password123" placeholder="Contraseña">
+                </div>
+                <button class="btn" onclick="login()">🚀 Hacer Login</button>
+                <div id="login-response" class="response" style="display: none;"></div>
+            </div>
+
+            <!-- Home Section -->
+            <div class="section">
+                <h2>🏠 2. Home - Usuario Actual + Cercanos</h2>
+                <p style="margin-bottom: 15px; color: #666;">Muestra el usuario actual y usuarios en un radio de 5km usando la fórmula de Haversine</p>
+                <button class="btn" onclick="getHome()">📍 Ver Home</button>
+                <div id="home-response" class="response" style="display: none;"></div>
+            </div>
+
+            <!-- General Section -->
+            <div class="section">
+                <h2>👥 3. General - Todos los Usuarios</h2>
+                <button class="btn" onclick="getGeneral()">📋 Ver Todos</button>
+                <div id="general-response" class="response" style="display: none;"></div>
+            </div>
+
+            <!-- Update Section -->
+            <div class="section">
+                <h2>✏️ 4. Actualizar Ubicación</h2>
+                <div class="input-group">
+                    <label>Latitud:</label>
+                    <input type="number" step="0.0001" id="lat" value="39.4750" placeholder="39.4699">
+                </div>
+                <div class="input-group">
+                    <label>Longitud:</label>
+                    <input type="number" step="0.0001" id="lng" value="-0.3760" placeholder="-0.3763">
+                </div>
+                <button class="btn" onclick="updateLocation()">📍 Actualizar</button>
+                <div id="update-response" class="response" style="display: none;"></div>
+            </div>
+
+            <!-- Other Endpoints -->
+            <div class="section">
+                <h2>📡 Otros Endpoints Disponibles</h2>
+                <div class="endpoints">
+                    <div class="endpoint-card">
+                        <h3>POST /api/logout</h3>
+                        <p>Cerrar sesión</p>
+                    </div>
+                    <div class="endpoint-card">
+                        <h3>GET /api/perfil?id=X</h3>
+                        <p>Ver perfil de usuario</p>
+                    </div>
+                    <div class="endpoint-card">
+                        <h3>POST /api/enviar-mensaje</h3>
+                        <p>Enviar mensaje</p>
+                    </div>
+                    <div class="endpoint-card">
+                        <h3>POST /api/invitar</h3>
+                        <p>Solicitud de amistad</p>
+                    </div>
+                    <div class="endpoint-card">
+                        <h3>POST /api/seguir</h3>
+                        <p>Seguir usuario</p>
+                    </div>
+                    <div class="endpoint-card">
+                        <h3>POST /api/bloquear</h3>
+                        <p>Bloquear usuario</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let token = null;
+        const API_URL = 'http://localhost:8000';
+        const API_KEY = 'test-api-key';
+
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch(`${API_URL}/api/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-API-KEY': API_KEY
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                const responseEl = document.getElementById('login-response');
+                responseEl.style.display = 'block';
+                responseEl.textContent = JSON.stringify(data, null, 2);
+
+                if (data.data && data.data.token) {
+                    token = data.data.token;
+                    alert('✅ Login exitoso! Token guardado.');
+                }
+            } catch (error) {
+                document.getElementById('login-response').textContent = 'Error: ' + error.message;
+                document.getElementById('login-response').style.display = 'block';
+            }
+        }
+
+        async function getHome() {
+            if (!token) {
+                alert('⚠️ Primero debes hacer login');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/home`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'X-API-KEY': API_KEY
+                    }
+                });
+
+                const data = await response.json();
+                const responseEl = document.getElementById('home-response');
+                responseEl.style.display = 'block';
+                responseEl.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('home-response').textContent = 'Error: ' + error.message;
+                document.getElementById('home-response').style.display = 'block';
+            }
+        }
+
+        async function getGeneral() {
+            if (!token) {
+                alert('⚠️ Primero debes hacer login');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/general`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'X-API-KEY': API_KEY
+                    }
+                });
+
+                const data = await response.json();
+                const responseEl = document.getElementById('general-response');
+                responseEl.style.display = 'block';
+                responseEl.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('general-response').textContent = 'Error: ' + error.message;
+                document.getElementById('general-response').style.display = 'block';
+            }
+        }
+
+        async function updateLocation() {
+            if (!token) {
+                alert('⚠️ Primero debes hacer login');
+                return;
+            }
+
+            const lat = parseFloat(document.getElementById('lat').value);
+            const lng = parseFloat(document.getElementById('lng').value);
+
+            try {
+                const response = await fetch(`${API_URL}/api/actualizar`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                        'X-API-KEY': API_KEY
+                    },
+                    body: JSON.stringify({ lat, lng, online: true })
+                });
+
+                const data = await response.json();
+                const responseEl = document.getElementById('update-response');
+                responseEl.style.display = 'block';
+                responseEl.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('update-response').textContent = 'Error: ' + error.message;
+                document.getElementById('update-response').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

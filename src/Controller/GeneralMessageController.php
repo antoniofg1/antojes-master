@@ -1,0 +1,74 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\Chat;
+use App\Entity\Message;
+use App\Entity\User;
+use App\Service\JwtService;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+
+class GeneralMessageController extends AbstractController
+{
+    #[Route('/api/general/mensaje', name: 'api_general_message', methods: ['POST'])]
+    public function sendMessage(
+        Request $request,
+        EntityManagerInterface $em,
+        JwtService $jwtService
+    ): JsonResponse {
+        // Check API Key
+        $apiKey = $request->headers->get('X-API-KEY');
+        $expected = $this->getParameter('app_api_key');
+        if ($apiKey !== $expected) {
+            return new JsonResponse(['data' => null, 'error' => 'Invalid API Key'], 401);
+        }
+
+        $authHeader = $request->headers->get('Authorization');
+        if (!$authHeader || !str_starts_with($authHeader, 'Bearer ')) {
+            return new JsonResponse(['data' => null, 'error' => 'Token required'], 401);
+        }
+
+        $token = substr($authHeader, 7);
+        $payload = $jwtService->validateToken($token);
+        if (!$payload) {
+            return new JsonResponse(['data' => null, 'error' => 'Invalid token'], 401);
+        }
+
+        $user = $em->getRepository(User::class)->find($payload['user_id']);
+        if (!$user) {
+            return new JsonResponse(['data' => null, 'error' => 'User not found'], 404);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        if (!$data || !isset($data['content'])) {
+            return new JsonResponse(['data' => null, 'error' => 'content required'], 400);
+        }
+
+        // Find general chat
+        $chat = $em->getRepository(Chat::class)->findOneBy(['type' => 'general']);
+        if (!$chat) {
+            return new JsonResponse(['data' => null, 'error' => 'General chat not found'], 404);
+        }
+
+        $message = new Message();
+        $message->setChat($chat);
+        $message->setUser($user);
+        $message->setText($data['content']);
+        $em->persist($message);
+        $em->flush();
+
+        return new JsonResponse([
+            'data' => [
+                'message' => 'Message sent successfully',
+                'id' => $message->getId(),
+                'content' => $message->getText(),
+                'created_at' => $message->getCreatedAt()->format('Y-m-d H:i:s'),
+            ],
+            'error' => null
+        ], 201);
+    }
+}

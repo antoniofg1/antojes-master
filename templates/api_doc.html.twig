@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - Chat Geolocalizado (Antojes)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .info-section {
+            background: white;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .info-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .info-section h3 {
+            color: #764ba2;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+        }
+        .endpoint {
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .method {
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 0.9em;
+        }
+        .method.post { background: #49cc90; color: white; }
+        .method.get { background: #61affe; color: white; }
+        .method.put { background: #fca130; color: white; }
+        .method.delete { background: #f93e3e; color: white; }
+        .endpoint-path {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        .endpoint-description {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin: 10px 0;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .badge.public {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        .badge.private {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+        .response-format {
+            margin-top: 10px;
+        }
+        .response-format h4 {
+            color: #555;
+            margin: 10px 0 5px 0;
+        }
+        .key-info {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .success-info {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        table tr:hover {
+            background: #f5f5f5;
+        }
+        .nav-menu {
+            background: white;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .nav-menu a {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 5px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        .nav-menu a:hover {
+            background: #764ba2;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🌍 API Chat Geolocalizado (Antojes)</h1>
+        <p>Documentación completa de endpoints REST</p>
+        <p style="font-size: 0.9em; margin-top: 10px;">Symfony 6/7 • JWT • Geolocalización</p>
+    </header>
+
+    <div class="container">
+        <div class="nav-menu">
+            <strong>Navegar a:</strong>
+            <a href="#auth">Autenticación</a>
+            <a href="#users">Usuarios</a>
+            <a href="#home">Home</a>
+            <a href="#chat">Chat General</a>
+            <a href="#private-chat">Chat Privado</a>
+            <a href="#friends">Amigos</a>
+            <a href="#security">Seguridad</a>
+        </div>
+
+        <div class="info-section">
+            <h2>📋 Información General</h2>
+            <p><strong>Base URL:</strong> <code>http://localhost:8000</code> (desarrollo)</p>
+            <p><strong>Tecnologías:</strong> Symfony 6/7, Doctrine ORM, MySQL, JWT</p>
+            <p><strong>Formato de respuesta:</strong> JSON</p>
+            
+            <div class="key-info">
+                <h3>🔑 API Key Requerida</h3>
+                <p>Todas las peticiones requieren el header <code>X-API-KEY</code></p>
+                <div class="code-block">X-API-KEY: test-api-key</div>
+            </div>
+
+            <div class="success-info">
+                <h3>✅ Formato de Respuestas</h3>
+                <p>Todas las respuestas siguen el formato estándar:</p>
+                <div class="code-block">{
+  "data": { /* datos de respuesta */ },
+  "error": null
+}
+
+// En caso de error:
+{
+  "data": null,
+  "error": "Mensaje de error"
+}</div>
+            </div>
+        </div>
+
+        <div class="info-section" id="auth">
+            <h2>🔐 Autenticación</h2>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/usuarios</span>
+                    <span class="badge public">Público</span>
+                </div>
+                <div class="endpoint-description">Registro de nuevo usuario</div>
+                
+                <div class="response-format">
+                    <h4>📤 Request:</h4>
+                    <div class="code-block">{
+  "name": "Juan Pérez",
+  "email": "juan@example.com",
+  "password": "securePassword123"
+}</div>
+
+                    <h4>📥 Response (201):</h4>
+                    <div class="code-block">{
+  "data": {
+    "message": "User created",
+    "user": {
+      "id": 1,
+      "name": "Juan Pérez",
+      "email": "juan@example.com"
+    }
+  },
+  "error": null
+}</div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/login</span>
+                    <span class="badge public">Público</span>
+                </div>
+                <div class="endpoint-description">Iniciar sesión y obtener token JWT</div>
+                
+                <div class="response-format">
+                    <h4>📤 Request:</h4>
+                    <div class="code-block">{
+  "email": "juan@example.com",
+  "password": "securePassword123"
+}</div>
+
+                    <h4>📥 Response (200):</h4>
+                    <div class="code-block">{
+  "data": {
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGc...",
+    "user": {
+      "id": 1,
+      "name": "Juan Pérez",
+      "email": "juan@example.com"
+    }
+  },
+  "error": null
+}</div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/logout</span>
+                    <span class="badge private">Privado</span>
+                </div>
+                <div class="endpoint-description">Cerrar sesión (marca usuario como offline)</div>
+                <div class="code-block">Authorization: Bearer &lt;token&gt;</div>
+            </div>
+        </div>
+
+        <div class="info-section" id="users">
+            <h2>👥 Gestión de Usuarios</h2>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/usuarios</span>
+                    <span class="badge private">Privado</span>
+                </div>
+                <div class="endpoint-description">Listar todos los usuarios</div>
+                
+                <div class="response-format">
+                    <h4>📥 Response (200):</h4>
+                    <div class="code-block">{
+  "data": {
+    "users": [
+      {
+        "id": 1,
+        "name": "Usuario 1",
+        "email": "user1@example.com"
+      }
+    ]
+  },
+  "error": null
+}</div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/usuarios/{id}</span>
+                    <span class="badge private">Privado</span>
+                </div>
+                <div class="endpoint-description">Obtener detalles de un usuario específico</div>
+                
+                <div class="response-format">
+                    <h4>📥 Response (200):</h4>
+                    <div class="code-block">{
+  "data": {
+    "id": 1,
+    "name": "Usuario 1",
+    "email": "user1@example.com",
+    "lat": "39.4699",
+    "lng": "-0.3763",
+    "online": true
+  },
+  "error": null
+}</div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method put">PUT</span>
+                    <span class="endpoint-path">/api/usuarios/{id}</span>
+                    <span class="badge private">Privado</span>
+                </div>
+                <div class="endpoint-description">Actualizar datos de usuario</div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method delete">DELETE</span>
+                    <span class="endpoint-path">/api/usuarios/{id}</span>
+                    <span class="badge private">Privado</span>
+                </div>
+                <div class="endpoint-description">Eliminar usuario</div>
+            </div>
+        </div>
+
+        <div class="info-section" id="home">
+            <h2>🏠 Home y Geolocalización</h2>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/home</span>
+                    <span class="badge private">Privado</span>
+                </div>
+                <div class="endpoint-description">Obtener datos del usuario y usuarios cercanos (radio de 5 km)</div>
+                
+                <div class="response-format">
+                    <h4>📥 Response (200):</h4>
+                    <div class="code-block">{
+  "data": {
+    "user": {
+      "id": 1,
+      "name": "Usuario Valencia",
+      "email": "user@valencia.com",
+      "lat": "39.4699",
+      "lng": "-0.3763",
+      "online": true
+    },
+    "nearby_users": [
+      {
+        "id": 2,
+        "name": "Usuario Cercano",
+        "distance": 1.23
+      }
+    ]
+  },
+  "error": null
+}</div>
+                    <p><strong>Nota:</strong> La distancia se calcula usando la fórmula de Haversine y está en kilómetros.</p>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/actualizar</span>
+                    <span class="badge private">Privado</span>
+                </div>
+                <div class="endpoint-description">Actualizar ubicación del usuario</div>
+                
+                <div class="response-format">
+                    <h4>📤 Request:</h4>
+                    <div class="code-block">{
+  "lat": "39.4699",
+  "lng": "-0.3763"
+}</div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/perfil</span>
+                    <span class="badge private">Privado</span>
+                </div>
+                <div class="endpoint-description">Obtener perfil del usuario autenticado</div>
+            </div>
+        </div>
+
+        <div class="info-section" id="chat">
+            <h2>💬 Chat General</h2>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/general</span>
+                    <span class="badge private">Privado</span>
+                </div>
+                <div class="endpoint-description">Obtener sala de chat general y sus mensajes</div>
+                
+                <div class="response-format">
+                    <h4>📥 Response (200):</h4>
+                    <div class="code-block">{
+  "data": {
+    "chat": {
+      "id": 1,
+      "type": "general",
+      "is_active": true
+    },
+    "messages": [
+      {
+        "id": 1,
+        "content": "Hola a todos!",
+        "sender": {
+          "id": 1,
+          "name": "Usuario 1"
+        },
+        "created_at": "2026-02-22T10:30:00+00:00"
+      }
+    ]
+  },
+  "error": null
+}</div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/general/mensaje</span>
+                    <span class="badge private">Privado</span>
+                </div>
+                <div class="endpoint-description">Enviar mensaje al chat general</div>
+                
+                <div class="response-format">
+                    <h4>📤 Request:</h4>
+                    <div class="code-block">{
+  "content": "Hola, este es mi mensaje!"
+}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section" id="private-chat">
+            <h2>🔒 Chat Privado</h2>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/privado</span>
+                    <span class="badge private">Privado</span>
+                </div>
+                <div class="endpoint-description">Crear sala de chat privada con otro usuario</div>
+                
+                <div class="response-format">
+                    <h4>📤 Request:</h4>
+                    <div class="code-block">{
+  "target_user_id": 2
+}</div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/privado/mensajes</span>
+                    <span class="badge private">Privado</span>
+                </div>
+                <div class="endpoint-description">Obtener mensajes de chat privado</div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/privado/mensaje</span>
+                    <span class="badge private">Privado</span>
+                </div>
+                <div class="endpoint-description">Enviar mensaje en chat privado</div>
+                
+                <div class="response-format">
+                    <h4>📤 Request:</h4>
+                    <div class="code-block">{
+  "chat_id": 2,
+  "content": "Mensaje privado"
+}</div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/privado/cambiar/chat</span>
+                    <span class="badge private">Privado</span>
+                </div>
+                <div class="endpoint-description">Cambiar a otro chat privado</div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/privado/salir</span>
+                    <span class="badge private">Privado</span>
+                </div>
+                <div class="endpoint-description">Salir de un chat privado</div>
+            </div>
+        </div>
+
+        <div class="info-section" id="friends">
+            <h2>👫 Sistema de Amigos</h2>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/amigos/solicitud</span>
+                    <span class="badge private">Privado</span>
+                </div>
+                <div class="endpoint-description">Enviar solicitud de amistad</div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/amigos/aceptar</span>
+                    <span class="badge private">Privado</span>
+                </div>
+                <div class="endpoint-description">Aceptar solicitud de amistad</div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/amigos/rechazar</span>
+                    <span class="badge private">Privado</span>
+                </div>
+                <div class="endpoint-description">Rechazar solicitud de amistad</div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/amigos</span>
+                    <span class="badge private">Privado</span>
+                </div>
+                <div class="endpoint-description">Listar amigos actuales</div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method delete">DELETE</span>
+                    <span class="endpoint-path">/api/amigos/{userId}</span>
+                    <span class="badge private">Privado</span>
+                </div>
+                <div class="endpoint-description">Eliminar amigo</div>
+            </div>
+        </div>
+
+        <div class="info-section" id="security">
+            <h2>🛡️ Seguridad y Headers</h2>
+
+            <h3>Headers para endpoints públicos:</h3>
+            <div class="code-block">X-API-KEY: test-api-key
+Content-Type: application/json</div>
+
+            <h3>Headers para endpoints privados:</h3>
+            <div class="code-block">X-API-KEY: test-api-key
+Authorization: Bearer &lt;your-jwt-token&gt;
+Content-Type: application/json</div>
+
+            <h3>Configuración de Seguridad:</h3>
+            <table>
+                <tr>
+                    <th>Aspecto</th>
+                    <th>Detalle</th>
+                </tr>
+                <tr>
+                    <td>API Key</td>
+                    <td>Validación automática en todas las rutas /api</td>
+                </tr>
+                <tr>
+                    <td>JWT</td>
+                    <td>Duración: 1 hora, Claims: user_id, email</td>
+                </tr>
+                <tr>
+                    <td>Autenticación</td>
+                    <td>Implementada en src/Security/JwtAuthenticator.php</td>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td>Hash con bcrypt (Symfony PasswordHasher)</td>
+                </tr>
+            </table>
+
+            <h3>Códigos de Estado HTTP:</h3>
+            <table>
+                <tr>
+                    <th>Código</th>
+                    <th>Significado</th>
+                </tr>
+                <tr>
+                    <td>200</td>
+                    <td>OK - Petición exitosa</td>
+                </tr>
+                <tr>
+                    <td>201</td>
+                    <td>Created - Recurso creado exitosamente</td>
+                </tr>
+                <tr>
+                    <td>400</td>
+                    <td>Bad Request - Datos inválidos o faltantes</td>
+                </tr>
+                <tr>
+                    <td>401</td>
+                    <td>Unauthorized - API Key o token inválido/faltante</td>
+                </tr>
+                <tr>
+                    <td>403</td>
+                    <td>Forbidden - Sin permisos para esta acción</td>
+                </tr>
+                <tr>
+                    <td>404</td>
+                    <td>Not Found - Recurso no encontrado</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="info-section">
+            <h2>🚀 Inicio Rápido</h2>
+            
+            <h3>1. Registrar un usuario:</h3>
+            <div class="code-block">POST /api/usuarios
+X-API-KEY: test-api-key
+
+{
+  "name": "Test User",
+  "email": "test@example.com",
+  "password": "password123"
+}</div>
+
+            <h3>2. Iniciar sesión:</h3>
+            <div class="code-block">POST /api/login
+X-API-KEY: test-api-key
+
+{
+  "email": "test@example.com",
+  "password": "password123"
+}</div>
+
+            <h3>3. Ver usuarios cercanos:</h3>
+            <div class="code-block">GET /api/home
+X-API-KEY: test-api-key
+Authorization: Bearer &lt;token-from-login&gt;</div>
+
+            <h3>4. Entrar al chat general:</h3>
+            <div class="code-block">GET /api/general
+X-API-KEY: test-api-key
+Authorization: Bearer &lt;token&gt;</div>
+        </div>
+
+        <footer style="text-align: center; padding: 40px 0; color: #666;">
+            <p><strong>Chat Geolocalizado (Antojes)</strong></p>
+            <p>Symfony 6/7 • Doctrine ORM • JWT Authentication • Geolocalización con Haversine</p>
+            <p style="margin-top: 10px;">📅 2026</p>
+        </footer>
+    </div>
+</body>
+</html>
