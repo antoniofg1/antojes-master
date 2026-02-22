@@ -1,0 +1,22 @@
+# Fly.io configuration
+app = "antojes-chat-api"
+primary_region = "mad" # Madrid
+
+[build]
+  builder = "paketobuildpacks/builder:base"
+
+[env]
+  APP_ENV = "prod"
+  APP_DEBUG = "0"
+  APP_API_KEY = "test-api-key"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"
