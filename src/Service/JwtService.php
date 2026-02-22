@@ -6,7 +6,8 @@ use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Validation\Constraint\SignedWith;
-use Lcobucci\JWT\Validation\Constraint\ValidAt;
+use Lcobucci\JWT\Validation\Constraint\StrictValidAt;
+use Lcobucci\JWT\Token\Plain;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class JwtService
@@ -39,9 +40,14 @@ class JwtService
     {
         try {
             $parsedToken = $this->config->parser()->parse($token);
+            
+            if (!$parsedToken instanceof Plain) {
+                return null;
+            }
+            
             $constraints = [
                 new SignedWith($this->config->signer(), $this->config->signingKey()),
-                new ValidAt(new \Lcobucci\Clock\SystemClock(new \DateTimeZone('UTC'))),
+                new StrictValidAt(new \DateTimeImmutable()),
             ];
 
             $this->config->validator()->assert($parsedToken, ...$constraints);

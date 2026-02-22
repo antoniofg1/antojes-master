@@ -1,9 +1,11 @@
 [phases.setup]
 nixPkgs = ["php82", "php82Packages.composer"]
-nixOverlays = ["https://github.com/railwayapp/nix-overlays/archive/main.tar.gz"]
 
 [phases.install]
-cmds = ["composer install --no-dev --optimize-autoloader --no-interaction"]
+cmds = [
+  "rm -f composer.lock",
+  "composer install --no-dev --optimize-autoloader --no-interaction"
+]
 
 [start]
 cmd = "php -S 0.0.0.0:$PORT -t public"
