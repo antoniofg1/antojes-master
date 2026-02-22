@@ -1,0 +1,12 @@
+# Ignorar archivos innecesarios en Railway
+.git/
+.vscode/
+tests/
+*.md
+!README.md
+composer.lock
+.env
+.env.local
+.env.test
+/var/
+node_modules/
