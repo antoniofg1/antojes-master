@@ -17,8 +17,15 @@ COPY . /app
 # Instalar dependencias PHP
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
+# Crear directorio var si no existe
+RUN mkdir -p /app/var
+
+# Copiar script de entrada
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 # Exponer puerto 10000 (Render usa este por defecto)
 EXPOSE 10000
 
-# Comando de inicio - usa variable PORT de Render
-CMD php -S 0.0.0.0:${PORT:-10000} -t public
+# Comando de inicio - ejecuta migraciones y luego el servidor
+ENTRYPOINT ["docker-entrypoint.sh"]
