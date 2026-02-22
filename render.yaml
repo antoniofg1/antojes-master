@@ -31,4 +31,3 @@ databases:
     databaseName: chat_geolocalizado
     engine: postgres
     plan: free
-    ipAllowList: []
