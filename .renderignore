@@ -1,0 +1,12 @@
+# Files to ignore during Render deployment
+.env
+.env.local
+.env.test
+/var/
+/vendor/
+/node_modules/
+.git/
+.vscode/
+tests/
+*.md
+composer.lock

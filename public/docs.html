@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Antojes - Documentación Completa</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        .login-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .login-box {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 450px;
+            width: 100%;
+        }
+        .login-box h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        .login-box p {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .login-form .input-group {
+            margin-bottom: 20px;
+        }
+        .login-form label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        .login-form input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border 0.3s;
+        }
+        .login-form input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 10px;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+        .login-error {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        .login-success {
+            background: #efe;
+            color: #3c3;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        .docs-screen {
+            display: none;
+        }
+        .user-info {
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .user-info .user-details {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .logout-btn:hover {
+            background: #c82333;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header p { font-size: 1.1em; opacity: 0.95; }
+        .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #28a745;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .sidebar {
+            width: 280px;
+            background: white;
+            height: calc(100vh - 130px);
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+            border-right: 2px solid #e0e0e0;
+            padding: 20px;
+        }
+        .sidebar h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        .sidebar ul {
+            list-style: none;
+        }
+        .sidebar li {
+            padding: 8px 0;
+        }
+        .sidebar a {
+            color: #555;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 0.95em;
+        }
+        .sidebar a:hover {
+            color: #667eea;
+        }
+        .content {
+            flex: 1;
+            padding: 30px;
+            background: white;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .section {
+            margin-bottom: 50px;
+            scroll-margin-top: 20px;
+        }
+        .section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        .section h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        .section h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        .endpoint {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .method {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            color: white;
+            margin-right: 10px;
+            font-size: 0.9em;
+        }
+        .method.post { background: #28a745; }
+        .method.get { background: #007bff; }
+        .method.put { background: #ffc107; color: #333; }
+        .method.delete { background: #dc3545; }
+        .endpoint-url {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #333;
+            font-weight: 600;
+        }
+        .code {
+            background: #282c34;
+            color: #61dafb;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        .code pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .success-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .warning-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+        tr:hover {
+            background: #f5f5f5;
+        }
+        .test-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+            transition: transform 0.2s;
+        }
+        .test-button:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- PANTALLA DE LOGIN -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <h1>🔐 Login</h1>
+            <p>API Antojes - Documentación</p>
+            <div class="login-error" id="loginError"></div>
+            <div class="login-success" id="loginSuccess">Login exitoso! Cargando...</div>
+            <form class="login-form" onsubmit="doLogin(event)">
+                <div class="input-group">
+                    <label>Email:</label>
+                    <input type="email" id="loginEmail" value="maria.garcia@valencia.com" required>
+                </div>
+                <div class="input-group">
+                    <label>Contraseña:</label>
+                    <input type="password" id="loginPassword" value="password123" required>
+                </div>
+                <button type="submit" class="login-btn">Iniciar Sesión</button>
+                <p style="margin-top: 20px; font-size: 0.9em; text-align: center; color: #999;">
+                    Usa: maria.garcia@valencia.com / password123
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- PANTALLA DE DOCUMENTACIÓN -->
+    <div class="docs-screen" id="docsScreen">
+        <!-- Barra de usuario -->
+        <div class="user-info">
+            <div class="user-details">
+                <div class="user-avatar" id="userAvatar">M</div>
+                <div>
+                    <div style="font-weight: 600;" id="userName">Usuario</div>
+                    <div style="font-size: 0.85em; color: #666;" id="userEmail">email@example.com</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="doLogout()">Cerrar Sesión</button>
+        </div>
+
+        <div class="header">
+            <h1>📡 API Antojes - Documentación Completa</h1>
+            <p>Chat Geolocalizado con Symfony 7.2 + MySQL 8.0</p>
+            <span class="badge">Formato Estandarizado: {data, error}</span>
+            <p style="font-size: 0.9em; margin-top: 15px;">
+                <a href="index.html" style="color: white; text-decoration: underline;">🧪 Ir a Interfaz de Pruebas</a>
+            </p>
+        </div>
+
+        <div class="container">
+        <div class="sidebar">
+            <h3>📋 Navegación</h3>
+            <ul>
+                <li><a href="#resumen">Resumen Ejecutivo</a></li>
+                <li><a href="#formato">Formato de Respuesta</a></li>
+                <li><a href="#autenticacion">Autenticación</a></li>
+                <li><a href="#usuarios">Gestión de Usuarios</a></li>
+                <li><a href="#auth">Login/Logout</a></li>
+                <li><a href="#home">Home y Perfil</a></li>
+                <li><a href="#general">Chat General</a></li>
+                <li><a href="#privados">Chats Privados</a></li>
+                <li><a href="#social">Funciones Sociales</a></li>
+                <li><a href="#modelo">Modelo de Datos</a></li>
+                <li><a href="#controladores">Controladores</a></li>
+                <li><a href="#fixtures">Datos de Prueba</a></li>
+                <li><a href="#codigos">Códigos HTTP</a></li>
+                <li><a href="#configuracion">Configuración</a></li>
+            </ul>
+        </div>
+
+        <div class="content">
+            <!-- RESUMEN EJECUTIVO -->
+            <section id="resumen" class="section">
+                <h2>📋 Resumen Ejecutivo</h2>
+                <p><strong>Proyecto:</strong> Chat Geolocalizado - API REST</p>
+                <p><strong>Tecnología:</strong> Symfony 7.2, Doctrine ORM 3.6, MySQL 8.0</p>
+                <p><strong>Seguridad:</strong> API Key + JWT (stateless)</p>
+                <p><strong>Estado:</strong> ✅ Completamente implementado con formato estandarizado <code>{data, error}</code></p>
+            </section>
+
+            <!-- FORMATO DE RESPUESTA -->
+            <section id="formato" class="section">
+                <h2>✨ Formato de Respuesta Estandarizado</h2>
+                <div class="success-box">
+                    <p><strong>TODAS las respuestas de la API usan el formato:</strong></p>
+                    <div class="code"><pre>{
+  "data": { ... },
+  "error": null
+}</pre></div>
+                    <p>En caso de éxito: <code>data</code> contiene la información, <code>error</code> es <code>null</code></p>
+                    <p>En caso de error: <code>data</code> es <code>null</code>, <code>error</code> contiene el mensaje de error</p>
+                </div>
+            </section>
+
+            <!-- AUTENTICACIÓN -->
+            <section id="autenticacion" class="section">
+                <h2>🔐 Autenticación y Seguridad</h2>
+                
+                <h3>Validación de API Key</h3>
+                <ul>
+                    <li><strong>Header requerido:</strong> <code>X-API-KEY</code></li>
+                    <li><strong>Valor:</strong> <code>test-api-key</code></li>
+                    <li><strong>Ubicación:</strong> <code>src/EventSubscriber/ApiKeySubscriber.php</code></li>
+                    <li><strong>Validación:</strong> Automática en todas las rutas <code>/api</code></li>
+                </ul>
+
+                <h3>JWT (JSON Web Tokens)</h3>
+                <ul>
+                    <li><strong>Ubicación:</strong> <code>src/Service/JwtService.php</code></li>
+                    <li><strong>Duración:</strong> 1 hora</li>
+                    <li><strong>Formato:</strong> <code>Bearer &lt;token&gt;</code> en header <code>Authorization</code></li>
+                    <li><strong>Claims:</strong> <code>user_id</code>, <code>email</code></li>
+                </ul>
+
+                <div class="info-box">
+                    <strong>Headers requeridos por tipo de endpoint:</strong>
+                    <ul>
+                        <li>Públicos: <code>X-API-KEY</code></li>
+                        <li>Privados: <code>X-API-KEY</code> + <code>Authorization: Bearer &lt;token&gt;</code></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- GESTIÓN DE USUARIOS -->
+            <section id="usuarios" class="section">
+                <h2>👥 1. Gestión de Usuarios</h2>
+
+                <div class="endpoint">
+                    <h4><span class="method post">POST</span><span class="endpoint-url">/api/usuarios</span></h4>
+                    <p>Crear nuevo usuario (público)</p>
+                    <div class="code"><pre>POST /api/usuarios
+X-API-KEY: test-api-key
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "securePassword123"
+}</pre></div>
+                    <p><strong>Respuesta (201):</strong></p>
+                    <div class="code"><pre>{
+  "data": {
+    "message": "User created",
+    "user": {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com"
+    }
+  },
+  "error": null
+}</pre></div>
+                </div>
+
+                <div class="endpoint">
+                    <h4><span class="method get">GET</span><span class="endpoint-url">/api/usuarios</span></h4>
+                    <p>Listar todos los usuarios (privado)</p>
+                    <p><strong>Respuesta (200):</strong></p>
+                    <div class="code"><pre>{
+  "data": {
+    "users": [
+      {
+        "id": 1,
+        "name": "John Doe",
+        "email": "john@example.com",
+        "lat": "40.7128",
+        "lng": "-74.0060",
+        "online": true
+      }
+    ]
+  },
+  "error": null
+}</pre></div>
+                </div>
+
+                <div class="endpoint">
+                    <h4><span class="method get">GET</span><span class="endpoint-url">/api/usuarios/{id}</span></h4>
+                    <p>Obtener usuario específico (privado)</p>
+                </div>
+
+                <div class="endpoint">
+                    <h4><span class="method put">PUT</span><span class="endpoint-url">/api/usuarios/{id}</span></h4>
+                    <p>Actualizar usuario (privado)</p>
+                </div>
+
+                <div class="endpoint">
+                    <h4><span class="method delete">DELETE</span><span class="endpoint-url">/api/usuarios/{id}</span></h4>
+                    <p>Eliminar usuario (privado)</p>
+                </div>
+            </section>
+
+            <!-- AUTENTICACIÓN -->
+            <section id="auth" class="section">
+                <h2>🔑 2. Autenticación</h2>
+
+                <div class="endpoint">
+                    <h4><span class="method post">POST</span><span class="endpoint-url">/api/login</span></h4>
+                    <p>Iniciar sesión (público)</p>
+                    <div class="code"><pre>POST /api/login
+X-API-KEY: test-api-key
+Content-Type: application/json
+
+{
+  "email": "maria.garcia@valencia.com",
+  "password": "password123"
+}</pre></div>
+                    <p><strong>Respuesta (200):</strong></p>
+                    <div class="code"><pre>{
+  "data": {
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGc...",
+    "user": {
+      "id": 1,
+      "name": "María García",
+      "email": "maria.garcia@valencia.com"
+    }
+  },
+  "error": null
+}</pre></div>
+                </div>
+
+                <div class="endpoint">
+                    <h4><span class="method post">POST</span><span class="endpoint-url">/api/logout</span></h4>
+                    <p>Cerrar sesión (privado)</p>
+                    <p><strong>Respuesta (200):</strong></p>
+                    <div class="code"><pre>{
+  "data": {
+    "message": "Logout successful"
+  },
+  "error": null
+}</pre></div>
+                </div>
+            </section>
+
+            <!-- HOME Y PERFIL -->
+            <section id="home" class="section">
+                <h2>🏠 3. Home y Perfil</h2>
+
+                <div class="endpoint">
+                    <h4><span class="method get">GET</span><span class="endpoint-url">/api/home</span></h4>
+                    <p>Obtener usuario actual + usuarios cercanos en radio de 5km (privado)</p>
+                    <p><strong>Respuesta (200):</strong></p>
+                    <div class="code"><pre>{
+  "data": {
+    "user": {
+      "id": 22,
+      "name": "María García",
+      "email": "maria.garcia@valencia.com",
+      "lat": "39.4699",
+      "lng": "-0.3763",
+      "online": true
+    },
+    "nearby_users": [
+      {
+        "id": 23,
+        "name": "Carlos Martínez",
+        "distance": 0.05
+      }
+    ]
+  },
+  "error": null
+}</pre></div>
+                    <div class="info-box">
+                        <strong>Reglas:</strong>
+                        <ul>
+                            <li>Solo devuelve usuarios dentro de 5 km (fórmula de Haversine)</li>
+                            <li>Excluye usuarios bloqueados</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <h4><span class="method get">GET</span><span class="endpoint-url">/api/perfil?id=X</span></h4>
+                    <p>Ver perfil de usuario específico (privado)</p>
+                </div>
+
+                <div class="endpoint">
+                    <h4><span class="method post">POST</span><span class="endpoint-url">/api/actualizar</span></h4>
+                    <p>Actualizar datos del usuario (ubicación, estado online, nombre, email)</p>
+                    <div class="code"><pre>POST /api/actualizar
+X-API-KEY: test-api-key
+Authorization: Bearer &lt;token&gt;
+Content-Type: application/json
+
+{
+  "lat": "39.4750",
+  "lng": "-0.3760",
+  "online": true
+}</pre></div>
+                    <p><strong>Respuesta (200):</strong></p>
+                    <div class="code"><pre>{
+  "data": {
+    "message": "User data updated successfully",
+    "user": {
+      "id": 22,
+      "name": "María García",
+      "email": "maria.garcia@valencia.com",
+      "lat": "39.4750",
+      "lng": "-0.3760",
+      "online": true
+    }
+  },
+  "error": null
+}</pre></div>
+                </div>
+            </section>
+
+            <!-- CHAT GENERAL -->
+            <section id="general" class="section">
+                <h2>💬 4. Chat General</h2>
+
+                <div class="endpoint">
+                    <h4><span class="method get">GET</span><span class="endpoint-url">/api/general</span></h4>
+                    <p>Obtener todos los usuarios (privado)</p>
+                    <p><strong>Respuesta (200):</strong></p>
+                    <div class="code"><pre>{
+  "data": {
+    "users": [...]
+  },
+  "error": null
+}</pre></div>
+                </div>
+
+                <div class="endpoint">
+                    <h4><span class="method get">GET</span><span class="endpoint-url">/api/mensajes?chat_id=1</span></h4>
+                    <p>Obtener mensajes de un chat (privado)</p>
+                </div>
+
+                <div class="endpoint">
+                    <h4><span class="method post">POST</span><span class="endpoint-url">/api/enviar-mensaje</span></h4>
+                    <p>Enviar mensaje a un chat (privado)</p>
+                    <div class="code"><pre>POST /api/enviar-mensaje
+X-API-KEY: test-api-key
+Authorization: Bearer &lt;token&gt;
+Content-Type: application/json
+
+{
+  "chat_id": 1,
+  "text": "Hola a todos!"
+}</pre></div>
+                </div>
+            </section>
+
+            <!-- CHATS PRIVADOS -->
+            <section id="privados" class="section">
+                <h2>🔒 5. Chats Privados</h2>
+
+                <div class="endpoint">
+                    <h4><span class="method post">POST</span><span class="endpoint-url">/api/invitar</span></h4>
+                    <p>Crear/obtener chat privado con otro usuario (privado)</p>
+                    <div class="code"><pre>POST /api/invitar
+X-API-KEY: test-api-key
+Authorization: Bearer &lt;token&gt;
+Content-Type: application/json
+
+{
+  "user_id": 2
+}</pre></div>
+                    <p><strong>Respuesta (201 o 200):</strong></p>
+                    <div class="code"><pre>{
+  "data": {
+    "message": "Chat created",
+    "chat": {
+      "id": 2,
+      "type": "private",
+      "is_active": true
+    }
+  },
+  "error": null
+}</pre></div>
+                    <div class="warning-box">
+                        <strong>Reglas:</strong>
+                        <ul>
+                            <li>Si ya existe chat activo entre ambos usuarios, lo reutiliza</li>
+                            <li>No permite invitación si existe bloqueo</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <h4><span class="method get">GET</span><span class="endpoint-url">/api/privado?id=X</span></h4>
+                    <p>Ver chat privado con usuario específico (privado)</p>
+                </div>
+            </section>
+
+            <!-- FUNCIONES SOCIALES -->
+            <section id="social" class="section">
+                <h2>👤 6. Funcionalidades Sociales</h2>
+
+                <h3>Bloquear/Desbloquear</h3>
+                <div class="endpoint">
+                    <h4><span class="method post">POST</span><span class="endpoint-url">/api/bloquear</span></h4>
+                    <p>Bloquear usuario (privado)</p>
+                    <div class="code"><pre>{
+  "user_id": 2
+}</pre></div>
+                    <p><strong>Efecto del bloqueo:</strong></p>
+                    <ul>
+                        <li>Usuario bloqueado no aparece en <code>/api/home</code></li>
+                        <li>No se puede crear chat privado si existe bloqueo</li>
+                    </ul>
+                </div>
+
+                <h3>Seguir/Dejar de seguir</h3>
+                <div class="endpoint">
+                    <h4><span class="method post">POST</span><span class="endpoint-url">/api/seguir</span></h4>
+                    <p>Seguir a otro usuario (privado)</p>
+                    <div class="code"><pre>{
+  "user_id": 2
+}</pre></div>
+                    <p><strong>Características:</strong></p>
+                    <ul>
+                        <li>Relación unilateral (A sigue a B, pero no requiere reciprocidad)</li>
+                        <li>No se puede seguir si existe bloqueo activo</li>
+                    </ul>
+                </div>
+
+                <h3>Solicitudes de Amistad</h3>
+                <div class="endpoint">
+                    <h4><span class="method post">POST</span><span class="endpoint-url">/api/amistad</span></h4>
+                    <p>Gestionar amistades (privado)</p>
+                    <p><strong>Acciones disponibles:</strong></p>
+                    <ul>
+                        <li><code>solicitar</code> - Enviar solicitud de amistad</li>
+                        <li><code>aceptar</code> - Aceptar solicitud pendiente</li>
+                        <li><code>rechazar</code> - Rechazar solicitud</li>
+                    </ul>
+                    <p><strong>Estados de solicitud:</strong></p>
+                    <ul>
+                        <li><code>pending</code> - Aguardando respuesta</li>
+                        <li><code>accepted</code> - Amistad confirmada</li>
+                        <li><code>rejected</code> - Rechazada</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- MODELO DE DATOS -->
+            <section id="modelo" class="section">
+                <h2>🗄️ Modelo de Datos</h2>
+                
+                <h3>Entidades</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Entidad</th>
+                            <th>Descripción</th>
+                            <th>Campos Principales</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>User</strong></td>
+                            <td>Usuarios del sistema</td>
+                            <td>id, name, email, password, lat, lng, online</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Chat</strong></td>
+                            <td>Salas de chat</td>
+                            <td>id, type (general/private), isActive</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ChatMember</strong></td>
+                            <td>Miembros de chats</td>
+                            <td>id, chat_id, user_id, leftAt</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Message</strong></td>
+                            <td>Mensajes</td>
+                            <td>id, chat_id, user_id, text, createdAt</td>
+                        </tr>
+                        <tr>
+                            <td><strong>UserBlock</strong></td>
+                            <td>Bloqueos entre usuarios</td>
+                            <td>id, blocker_user_id, blocked_user_id</td>
+                        </tr>
+                        <tr>
+                            <td><strong>UserFollow</strong></td>
+                            <td>Relaciones de seguimiento</td>
+                            <td>id, follower_user_id, followed_user_id</td>
+                        </tr>
+                        <tr>
+                            <td><strong>FriendRequest</strong></td>
+                            <td>Solicitudes de amistad</td>
+                            <td>id, sender_user_id, receiver_user_id, status</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- CONTROLADORES -->
+            <section id="controladores" class="section">
+                <h2>🛠️ Controladores Implementados</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Archivo</th>
+                            <th>Endpoints</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>UserController.php</td><td>/api/usuarios (CRUD)</td></tr>
+                        <tr><td>LoginController.php</td><td>/api/login</td></tr>
+                        <tr><td>LogoutController.php</td><td>/api/logout</td></tr>
+                        <tr><td>HomeController.php</td><td>/api/home</td></tr>
+                        <tr><td>GeneralController.php</td><td>/api/general</td></tr>
+                        <tr><td>MessageController.php</td><td>/api/mensajes, /api/enviar-mensaje</td></tr>
+                        <tr><td>ProfileController.php</td><td>/api/perfil</td></tr>
+                        <tr><td>UpdateController.php</td><td>/api/actualizar</td></tr>
+                        <tr><td>InviteController.php</td><td>/api/invitar</td></tr>
+                        <tr><td>PrivateController.php</td><td>/api/privado</td></tr>
+                        <tr><td>BlockController.php</td><td>/api/bloquear</td></tr>
+                        <tr><td>FollowController.php</td><td>/api/seguir</td></tr>
+                        <tr><td>FriendshipController.php</td><td>/api/amistad</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- DATOS DE PRUEBA -->
+            <section id="fixtures" class="section">
+                <h2>🧪 Datos de Prueba (Fixtures)</h2>
+                <div class="success-box">
+                    <p><strong>21 usuarios de Valencia</strong> con coordenadas GPS reales:</p>
+                    <ul>
+                        <li>maria.garcia@valencia.com / password123</li>
+                        <li>carlos.martinez@valencia.com / password123</li>
+                        <li>ana.lopez@valencia.com / password123</li>
+                        <li>... y 18 más</li>
+                    </ul>
+                    <p><strong>Relaciones precargadas:</strong></p>
+                    <ul>
+                        <li>Chat General (ID=1)</li>
+                        <li>Ejemplos de follows, bloques y amistades</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- CÓDIGOS HTTP -->
+            <section id="codigos" class="section">
+                <h2>✅ Códigos de Respuesta HTTP</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Significado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>200</td><td>OK - Operación exitosa</td></tr>
+                        <tr><td>201</td><td>Created - Recurso creado</td></tr>
+                        <tr><td>400</td><td>Bad Request - Datos inválidos</td></tr>
+                        <tr><td>401</td><td>Unauthorized - API Key o token inválido</td></tr>
+                        <tr><td>403</td><td>Forbidden - Acceso denegado</td></tr>
+                        <tr><td>404</td><td>Not Found - Recurso no encontrado</td></tr>
+                        <tr><td>500</td><td>Server Error</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- CONFIGURACIÓN -->
+            <section id="configuracion" class="section">
+                <h2>🔍 Configuración</h2>
+                
+                <h3>Archivo .env</h3>
+                <div class="code"><pre>APP_ENV=dev
+APP_SECRET=some_random_secret_key_here
+APP_API_KEY=test-api-key
+DATABASE_URL="mysql://root@127.0.0.1:3306/antojes_db?serverVersion=8.0.32&charset=utf8mb4"</pre></div>
+
+                <h3>Notas Importantes</h3>
+                <div class="info-box">
+                    <ol>
+                        <li><strong>Formato de Respuesta:</strong> TODAS las respuestas usan <code>{data, error}</code></li>
+                        <li><strong>Geolocalización:</strong> Usa fórmula de Haversine para calcular distancias</li>
+                        <li><strong>Chat General:</strong> Siempre tiene ID=1</li>
+                        <li><strong>JWT:</strong> Stateless, válido por 1 hora</li>
+                        <li><strong>Seguridad:</strong> Doble validación: API Key + JWT para endpoints privados</li>
+                        <li><strong>Nomenclatura:</strong> Endpoints en español excepto login, logout y home</li>
+                    </ol>
+                </div>
+            </section>
+
+            <div style="text-align: center; padding: 40px; background: #f8f9fa; border-radius: 10px; margin-top: 40px;">
+                <h3 style="color: #667eea; margin-bottom: 15px;">✅ Proyecto Completamente Implementado</h3>
+                <p><strong>Última actualización:</strong> 22/02/2026</p>
+                <p><strong>Servidor Local:</strong> <a href="http://localhost:8000">http://localhost:8000</a></p>
+                <p><strong>Interfaz de Pruebas:</strong> <a href="index.html">http://localhost:8000/index.html</a></p>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+        const API_KEY = 'test-api-key';
+        let userToken = null;
+        let userData = null;
+
+        // Verificar si ya hay una sesión activa
+        window.onload = function() {
+            const savedToken = sessionStorage.getItem('authToken');
+            const savedUser = sessionStorage.getItem('userData');
+            
+            if (savedToken && savedUser) {
+                userToken = savedToken;
+                userData = JSON.parse(savedUser);
+                showDocs();
+            }
+        };
+
+        async function doLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorEl = document.getElementById('loginError');
+            const successEl = document.getElementById('loginSuccess');
+            
+            errorEl.style.display = 'none';
+            successEl.style.display = 'none';
+            
+            try {
+                const response = await fetch(`${API_URL}/api/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-API-KEY': API_KEY
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                
+                if (data.data && data.data.token) {
+                    userToken = data.data.token;
+                    userData = data.data.user;
+                    
+                    // Guardar en sessionStorage
+                    sessionStorage.setItem('authToken', userToken);
+                    sessionStorage.setItem('userData', JSON.stringify(userData));
+                    
+                    successEl.style.display = 'block';
+                    successEl.textContent = '¡Login exitoso! Cargando documentación...';
+                    
+                    setTimeout(() => {
+                        showDocs();
+                    }, 1000);
+                } else {
+                    errorEl.textContent = data.error || 'Error en el login';
+                    errorEl.style.display = 'block';
+                }
+            } catch (error) {
+                errorEl.textContent = 'Error de conexión: ' + error.message;
+                errorEl.style.display = 'block';
+            }
+        }
+
+        function showDocs() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('docsScreen').style.display = 'block';
+            
+            // Mostrar info del usuario
+            if (userData) {
+                const initials = userData.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                document.getElementById('userAvatar').textContent = initials;
+                document.getElementById('userName').textContent = userData.name;
+                document.getElementById('userEmail').textContent = userData.email;
+            }
+        }
+
+        function doLogout() {
+            sessionStorage.removeItem('authToken');
+            sessionStorage.removeItem('userData');
+            userToken = null;
+            userData = null;
+            
+            document.getElementById('docsScreen').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'flex';
+            
+            // Limpiar formulario
+            document.getElementById('loginEmail').value = 'maria.garcia@valencia.com';
+            document.getElementById('loginPassword').value = 'password123';
+            document.getElementById('loginError').style.display = 'none';
+            document.getElementById('loginSuccess').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
