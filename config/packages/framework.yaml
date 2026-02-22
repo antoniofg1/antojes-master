@@ -2,8 +2,8 @@
 framework:
     secret: '%env(APP_SECRET)%'
     
-    # Trusted proxies for Render.com
-    trusted_proxies: '%env(TRUSTED_PROXIES)%'
+    # Trusted proxies for Render.com (optional)
+    trusted_proxies: '%env(default::TRUSTED_PROXIES)%'
     trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port']
 
     # Note that the session will be started ONLY if you read or write from it.
