@@ -898,7 +898,10 @@ DATABASE_URL="mysql://root@127.0.0.1:3306/antojes_db?serverVersion=8.0.32&charse
     </div>
 
     <script>
-        const API_URL = 'http://localhost:8000';
+        // Detectar automáticamente si estamos en local o producción
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+            ? 'http://localhost:8000' 
+            : window.location.origin;
         const API_KEY = 'test-api-key';
         let userToken = null;
         let userData = null;
