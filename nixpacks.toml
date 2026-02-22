@@ -2,10 +2,7 @@
 nixPkgs = ["php82", "php82Packages.composer"]
 
 [phases.install]
-cmds = [
-  "composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist",
-  "composer dump-autoload --optimize --no-dev --classmap-authoritative"
-]
+cmds = ["composer install --no-dev --optimize-autoloader --no-interaction"]
 
 [start]
 cmd = "php -S 0.0.0.0:$PORT -t public"
