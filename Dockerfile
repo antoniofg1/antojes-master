@@ -17,8 +17,8 @@ COPY . /app
 # Instalar dependencias PHP
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Exponer puerto
-EXPOSE 8080
+# Exponer puerto 10000 (Render usa este por defecto)
+EXPOSE 10000
 
-# Comando de inicio
-CMD php -S 0.0.0.0:8080 -t public
+# Comando de inicio - usa variable PORT de Render
+CMD php -S 0.0.0.0:${PORT:-10000} -t public
