@@ -16,15 +16,19 @@ class HealthController extends AbstractController
         // Verificar base de datos
         $userCount = 0;
         $dbError = null;
+        $dbConnected = false;
+        
         try {
             $userCount = $em->getRepository(User::class)->count([]);
+            $dbConnected = true;
         } catch (\Exception $e) {
             $dbError = $e->getMessage();
         }
         
         return new JsonResponse([
-            'status' => 'ok',
+            'status' => $dbConnected ? 'ok' : 'warning',
             'timestamp' => time(),
+            'server' => 'running',
             'env' => [
                 'APP_ENV' => $_ENV['APP_ENV'] ?? 'not set',
                 'APP_API_KEY_SET' => isset($_ENV['APP_API_KEY']) ? 'yes' : 'no',
@@ -32,6 +36,7 @@ class HealthController extends AbstractController
                 'DATABASE_URL_SET' => isset($_ENV['DATABASE_URL']) ? 'yes' : 'no',
             ],
             'database' => [
+                'connected' => $dbConnected,
                 'users_count' => $userCount,
                 'error' => $dbError
             ]
