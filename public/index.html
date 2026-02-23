@@ -156,6 +156,8 @@
                 <strong>ℹ️ Información:</strong> Todos los endpoints usan formato <code>{data, error}</code>
                 <br>
                 <strong>🔑 API Key:</strong> test-api-key (requerida en todos los endpoints)
+                <br>
+                <strong>🌐 API URL:</strong> <code id="api-url-display">Cargando...</code>
             </div>
 
             <!-- Login Section -->
@@ -249,7 +251,10 @@
             const password = document.getElementById('password').value;
             
             try {
-                const response = await fetch(`${API_URL}/api/login`, {
+                const url = `${API_URL}/api/login`;
+                console.log('🔗 Intentando conectar a:', url);
+                
+                const response = await fetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -257,6 +262,10 @@
                     },
                     body: JSON.stringify({ email, password })
                 });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
 
                 const data = await response.json();
                 const responseEl = document.getElementById('login-response');
@@ -268,7 +277,9 @@
                     alert('✅ Login exitoso! Token guardado.');
                 }
             } catch (error) {
-                document.getElementById('login-response').textContent = 'Error: ' + error.message;
+                const errorMsg = `Error de conexión: ${error.message}\n\nURL intentada: ${API_URL}/api/login\n\nDetalles: ${error}`;
+                console.error('❌ Error completo:', error);
+                document.getElementById('login-response').textContent = errorMsg;
                 document.getElementById('login-response').style.display = 'block';
             }
         }
@@ -352,6 +363,12 @@
                 document.getElementById('update-response').style.display = 'block';
             }
         }
+
+        // Mostrar API URL al cargar la página
+        window.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('api-url-display').textContent = API_URL;
+            console.log('🌐 API configurada en:', API_URL);
+        });
     </script>
 </body>
 </html>

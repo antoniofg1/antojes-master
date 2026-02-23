@@ -13,5 +13,5 @@ php bin/console doctrine:fixtures:load --no-interaction || echo "⚠️ Fixtures
 
 echo "✅ Deployment complete!"
 
-# Iniciar servidor
-exec php -S 0.0.0.0:${PORT:-10000} -t public
+# Iniciar servidor con router personalizado
+exec php -S 0.0.0.0:${PORT:-10000} -t /app/public /app/public/router.php
