@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Antojes - Documentación de Endpoints</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header p { font-size: 1.2em; opacity: 0.9; }
+        .content { padding: 40px; }
+        .info-box {
+            background: #e3f2fd;
+            border-left: 5px solid #2196F3;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+        .endpoint-group {
+            margin-bottom: 40px;
+        }
+        .endpoint-group h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        .endpoint {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .endpoint:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .method {
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.9em;
+            font-family: monospace;
+        }
+        .method.get { background: #28a745; color: white; }
+        .method.post { background: #007bff; color: white; }
+        .method.put { background: #ffc107; color: black; }
+        .method.delete { background: #dc3545; color: white; }
+        .route {
+            font-family: monospace;
+            font-size: 1.1em;
+            color: #333;
+            font-weight: 600;
+        }
+        .auth-required {
+            background: #fff3cd;
+            color: #856404;
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .description {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+        .params {
+            margin-top: 15px;
+        }
+        .params h4 {
+            color: #555;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+        .param-list {
+            background: white;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        .param {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-left: 3px solid #667eea;
+            padding-left: 12px;
+        }
+        .param-name {
+            font-family: monospace;
+            color: #667eea;
+            font-weight: bold;
+        }
+        .param-type {
+            color: #999;
+            font-size: 0.85em;
+            font-style: italic;
+        }
+        .param-desc {
+            color: #666;
+            margin-top: 3px;
+        }
+        .example {
+            background: #282c34;
+            color: #61dafb;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+        .response {
+            margin-top: 15px;
+        }
+        .response h4 {
+            color: #555;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            color: #667eea;
+        }
+        .nav {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .nav a {
+            color: #667eea;
+            text-decoration: none;
+            padding: 8px 16px;
+            background: white;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .nav a:hover {
+            background: #667eea;
+            color: white;
+        }
+        .quick-start {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📡 API Antojes - Chat Geolocalizado</h1>
+            <p>Documentación completa de endpoints</p>
+            <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">
+                URL Base: <span id="api-url" style="font-weight: bold;">Cargando...</span>
+            </p>
+        </div>
+
+        <div class="content">
+            <div class="nav">
+                <a href="#auth">🔐 Autenticación</a>
+                <a href="#users">👥 Usuarios</a>
+                <a href="#home">🏠 Home</a>
+                <a href="#messages">💬 Mensajes</a>
+                <a href="#chats">💼 Chats</a>
+                <a href="#friends">🤝 Amistades</a>
+                <a href="#social">❤️ Social</a>
+                <a href="#config">⚙️ Config</a>
+            </div>
+
+            <div class="info-box">
+                <h3>ℹ️ Información General</h3>
+                <p><strong>API Key requerida:</strong> Todos los endpoints requieren el header <code>X-API-KEY: test-api-key</code></p>
+                <p><strong>Autenticación:</strong> Los endpoints marcados requieren el header <code>Authorization: Bearer {token}</code></p>
+                <p><strong>Formato de respuesta:</strong> Todas las respuestas siguen el formato <code>{ "data": {...}, "error": null }</code></p>
+            </div>
+
+            <div class="quick-start">
+                <h3>🚀 Inicio Rápido</h3>
+                <div class="example">
+// 1. Login
+fetch('/api/login', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-API-KEY': 'test-api-key'
+  },
+  body: JSON.stringify({
+    email: 'maria.garcia@valencia.com',
+    password: 'password123'
+  })
+})
+
+// 2. Usar el token en las siguientes peticiones
+fetch('/api/home', {
+  headers: {
+    'X-API-KEY': 'test-api-key',
+    'Authorization': 'Bearer {token_del_login}'
+  }
+})
+                </div>
+            </div>
+
+            <!-- AUTENTICACIÓN -->
+            <div id="auth" class="endpoint-group">
+                <h2>🔐 Autenticación</h2>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="route">/api/login</span>
+                    </div>
+                    <div class="description">
+                        Inicia sesión y obtiene un token JWT para usar en las siguientes peticiones.
+                    </div>
+                    <div class="params">
+                        <h4>📥 Body (JSON):</h4>
+                        <div class="param-list">
+                            <div class="param">
+                                <span class="param-name">email</span>
+                                <span class="param-type">(string, requerido)</span>
+                                <div class="param-desc">Email del usuario</div>
+                            </div>
+                            <div class="param">
+                                <span class="param-name">password</span>
+                                <span class="param-type">(string, requerido)</span>
+                                <div class="param-desc">Contraseña del usuario</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="response">
+                        <h4>📤 Respuesta:</h4>
+                        <div class="example">
+{
+  "data": {
+    "token": "eyJ0eXAiOiJKV1Q...",
+    "user": {
+      "id": 1,
+      "name": "María García",
+      "email": "maria.garcia@valencia.com"
+    }
+  },
+  "error": null
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="route">/api/logout</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Cierra la sesión del usuario actual (marca como offline).
+                    </div>
+                    <div class="response">
+                        <h4>📤 Respuesta:</h4>
+                        <div class="example">
+{
+  "data": {
+    "message": "Sesión cerrada correctamente"
+  },
+  "error": null
+}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- USUARIOS -->
+            <div id="users" class="endpoint-group">
+                <h2>👥 Usuarios</h2>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="route">/api/usuarios</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Lista todos los usuarios del sistema.
+                    </div>
+                    <div class="response">
+                        <h4>📤 Respuesta:</h4>
+                        <div class="example">
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "María García",
+      "email": "maria.garcia@valencia.com",
+      "lat": 39.4699,
+      "lng": -0.3763,
+      "online": true
+    }
+  ],
+  "error": null
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="route">/api/usuarios</span>
+                    </div>
+                    <div class="description">
+                        Crea un nuevo usuario en el sistema.
+                    </div>
+                    <div class="params">
+                        <h4>📥 Body (JSON):</h4>
+                        <div class="param-list">
+                            <div class="param">
+                                <span class="param-name">name</span>
+                                <span class="param-type">(string, requerido)</span>
+                                <div class="param-desc">Nombre del usuario</div>
+                            </div>
+                            <div class="param">
+                                <span class="param-name">email</span>
+                                <span class="param-type">(string, requerido)</span>
+                                <div class="param-desc">Email único del usuario</div>
+                            </div>
+                            <div class="param">
+                                <span class="param-name">password</span>
+                                <span class="param-type">(string, requerido)</span>
+                                <div class="param-desc">Contraseña (mínimo 6 caracteres)</div>
+                            </div>
+                            <div class="param">
+                                <span class="param-name">lat</span>
+                                <span class="param-type">(float, opcional)</span>
+                                <div class="param-desc">Latitud inicial</div>
+                            </div>
+                            <div class="param">
+                                <span class="param-name">lng</span>
+                                <span class="param-type">(float, opcional)</span>
+                                <div class="param-desc">Longitud inicial</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="route">/api/usuarios/me</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Obtiene la información del usuario actual autenticado.
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="route">/api/usuarios/{id}</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Obtiene la información de un usuario específico por ID.
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method put">PUT</span>
+                        <span class="route">/api/usuarios/me</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Actualiza la información del usuario actual.
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="route">/api/usuarios/locations</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Obtiene las localizaciones de todos los usuarios para mostrar en el mapa.
+                    </div>
+                </div>
+            </div>
+
+            <!-- HOME -->
+            <div id="home" class="endpoint-group">
+                <h2>🏠 Home & Actualización</h2>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="route">/api/home</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Devuelve el usuario actual y usuarios cercanos en un radio de 5km (fórmula de Haversine).
+                    </div>
+                    <div class="response">
+                        <h4>📤 Respuesta:</h4>
+                        <div class="example">
+{
+  "data": {
+    "current_user": {
+      "id": 1,
+      "name": "María García",
+      "email": "maria.garcia@valencia.com",
+      "lat": 39.4699,
+      "lng": -0.3763,
+      "online": true
+    },
+    "nearby_users": [
+      {
+        "id": 2,
+        "name": "Juan López",
+        "distance_km": 2.3,
+        "online": true
+      }
+    ]
+  },
+  "error": null
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="route">/api/actualizar</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Actualiza la posición GPS y estado online del usuario actual.
+                    </div>
+                    <div class="params">
+                        <h4>📥 Body (JSON):</h4>
+                        <div class="param-list">
+                            <div class="param">
+                                <span class="param-name">lat</span>
+                                <span class="param-type">(float, requerido)</span>
+                                <div class="param-desc">Nueva latitud</div>
+                            </div>
+                            <div class="param">
+                                <span class="param-name">lng</span>
+                                <span class="param-type">(float, requerido)</span>
+                                <div class="param-desc">Nueva longitud</div>
+                            </div>
+                            <div class="param">
+                                <span class="param-name">online</span>
+                                <span class="param-type">(boolean, opcional)</span>
+                                <div class="param-desc">Estado de conexión (true/false)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="route">/api/perfil</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Obtiene el perfil completo del usuario actual con estadísticas.
+                    </div>
+                </div>
+            </div>
+
+            <!-- MENSAJES -->
+            <div id="messages" class="endpoint-group">
+                <h2>💬 Mensajes</h2>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="route">/api/mensaje?chat_id={id}</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Obtiene todos los mensajes de un chat específico.
+                    </div>
+                    <div class="params">
+                        <h4>📥 Query Params:</h4>
+                        <div class="param-list">
+                            <div class="param">
+                                <span class="param-name">chat_id</span>
+                                <span class="param-type">(int, requerido)</span>
+                                <div class="param-desc">ID del chat</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="route">/api/mensaje?chat_id={id}</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Envía un nuevo mensaje a un chat específico.
+                    </div>
+                    <div class="params">
+                        <h4>📥 Body (JSON):</h4>
+                        <div class="param-list">
+                            <div class="param">
+                                <span class="param-name">content</span>
+                                <span class="param-type">(string, requerido)</span>
+                                <div class="param-desc">Contenido del mensaje</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="route">/api/general</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Obtiene información del chat general (ID 1) y sus mensajes.
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="route">/api/general/mensaje</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Envía un mensaje al chat general.
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHATS PRIVADOS -->
+            <div id="chats" class="endpoint-group">
+                <h2>💼 Chats Privados</h2>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="route">/api/privado</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Lista todos los chats privados del usuario actual.
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="route">/api/privado/cambiar/chat</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Cambia al chat privado con otro usuario (lo crea si no existe).
+                    </div>
+                    <div class="params">
+                        <h4>📥 Body (JSON):</h4>
+                        <div class="param-list">
+                            <div class="param">
+                                <span class="param-name">user_id</span>
+                                <span class="param-type">(int, requerido)</span>
+                                <div class="param-desc">ID del usuario con quien chatear</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="route">/api/privado/salir</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Sale del chat privado actual.
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="route">/api/invitar</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Invita usuarios a un chat privado.
+                    </div>
+                </div>
+            </div>
+
+            <!-- AMISTADES -->
+            <div id="friends" class="endpoint-group">
+                <h2>🤝 Amistades</h2>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="route">/api/amistad/solicitar</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Envía una solicitud de amistad a otro usuario.
+                    </div>
+                    <div class="params">
+                        <h4>📥 Body (JSON):</h4>
+                        <div class="param-list">
+                            <div class="param">
+                                <span class="param-name">receiver_id</span>
+                                <span class="param-type">(int, requerido)</span>
+                                <div class="param-desc">ID del usuario a quien enviar solicitud</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="route">/api/amistad/aceptar</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Acepta una solicitud de amistad pendiente.
+                    </div>
+                    <div class="params">
+                        <h4>📥 Body (JSON):</h4>
+                        <div class="param-list">
+                            <div class="param">
+                                <span class="param-name">request_id</span>
+                                <span class="param-type">(int, requerido)</span>
+                                <div class="param-desc">ID de la solicitud a aceptar</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="route">/api/amistad/rechazar</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Rechaza una solicitud de amistad pendiente.
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="route">/api/amistad</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Lista todos los amigos del usuario actual.
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="route">/api/amistad/pendientes</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Lista todas las solicitudes de amistad pendientes.
+                    </div>
+                </div>
+            </div>
+
+            <!-- SOCIAL -->
+            <div id="social" class="endpoint-group">
+                <h2>❤️ Social (Seguir/Bloquear)</h2>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="route">/api/seguir</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Comienza a seguir a otro usuario.
+                    </div>
+                    <div class="params">
+                        <h4>📥 Body (JSON):</h4>
+                        <div class="param-list">
+                            <div class="param">
+                                <span class="param-name">followed_id</span>
+                                <span class="param-type">(int, requerido)</span>
+                                <div class="param-desc">ID del usuario a seguir</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method delete">DELETE</span>
+                        <span class="route">/api/seguir/{id}</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Deja de seguir a un usuario.
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="route">/api/seguidos</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Lista todos los usuarios que el usuario actual sigue.
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="route">/api/bloquear</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Bloquea a otro usuario.
+                    </div>
+                    <div class="params">
+                        <h4>📥 Body (JSON):</h4>
+                        <div class="param-list">
+                            <div class="param">
+                                <span class="param-name">blocked_id</span>
+                                <span class="param-type">(int, requerido)</span>
+                                <div class="param-desc">ID del usuario a bloquear</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method delete">DELETE</span>
+                        <span class="route">/api/bloquear/{id}</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Desbloquea a un usuario previamente bloqueado.
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="route">/api/bloqueados</span>
+                        <span class="auth-required">🔒 Auth</span>
+                    </div>
+                    <div class="description">
+                        Lista todos los usuarios bloqueados por el usuario actual.
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONFIG -->
+            <div id="config" class="endpoint-group">
+                <h2>⚙️ Configuración & Utilidades</h2>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="route">/api/config</span>
+                    </div>
+                    <div class="description">
+                        Obtiene la configuración pública de la aplicación (Google Maps API Key, etc).
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="route">/health</span>
+                    </div>
+                    <div class="description">
+                        Verifica el estado del servidor y conexión a la base de datos.
+                    </div>
+                    <div class="response">
+                        <h4>📤 Respuesta:</h4>
+                        <div class="example">
+{
+  "status": "ok",
+  "server": "running",
+  "timestamp": 1708704000,
+  "database": {
+    "connected": true,
+    "users_count": 5,
+    "error": null
+  }
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="route">/</span>
+                    </div>
+                    <div class="description">
+                        Información de bienvenida de la API.
+                    </div>
+                </div>
+            </div>
+
+            <!-- USUARIOS DE PRUEBA -->
+            <div class="endpoint-group">
+                <h2>👤 Usuarios de Prueba</h2>
+                <div class="endpoint" style="border-left-color: #28a745;">
+                    <div class="description">
+                        Estos usuarios están pre-cargados en la base de datos para pruebas:
+                    </div>
+                    <div class="param-list">
+                        <div class="param" style="border-left-color: #28a745;">
+                            <strong>María García</strong><br>
+                            Email: <code>maria.garcia@valencia.com</code><br>
+                            Password: <code>password123</code><br>
+                            Ubicación: Plaza del Ayuntamiento, Valencia
+                        </div>
+                        <div class="param" style="border-left-color: #28a745;">
+                            <strong>Juan López</strong><br>
+                            Email: <code>juan.lopez@valencia.com</code><br>
+                            Password: <code>password123</code><br>
+                            Ubicación: Plaza de la Reina, Valencia
+                        </div>
+                        <div class="param" style="border-left-color: #28a745;">
+                            <strong>Ana Martínez</strong><br>
+                            Email: <code>ana.martinez@valencia.com</code><br>
+                            Password: <code>password123</code><br>
+                            Ubicación: Ciudad de las Artes y las Ciencias
+                        </div>
+                        <div class="param" style="border-left-color: #28a745;">
+                            <strong>Carlos Rodríguez</strong><br>
+                            Email: <code>carlos.rodriguez@valencia.com</code><br>
+                            Password: <code>password123</code><br>
+                            Ubicación: Mestalla (Estadio)
+                        </div>
+                        <div class="param" style="border-left-color: #28a745;">
+                            <strong>Laura Sánchez</strong><br>
+                            Email: <code>laura.sanchez@valencia.com</code><br>
+                            Password: <code>password123</code><br>
+                            Ubicación: Playa de la Malvarrosa
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box" style="margin-top: 40px;">
+                <h3>🔗 Enlaces Útiles</h3>
+                <p><a href="/index.html" style="color: #667eea; font-weight: 600;">Interfaz de Pruebas</a> - Prueba todos los endpoints interactivamente</p>
+                <p><a href="/check.html" style="color: #667eea; font-weight: 600;">Verificación del Servidor</a> - Comprueba el estado del servidor</p>
+                <p><a href="/health" style="color: #667eea; font-weight: 600;">Health Check</a> - Estado actual del servidor (JSON)</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Detectar y mostrar API URL
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+            ? 'http://localhost:8000' 
+            : window.location.origin;
+        document.getElementById('api-url').textContent = API_URL;
+
+        // Smooth scroll para la navegación
+        document.querySelectorAll('.nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

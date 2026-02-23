@@ -31,5 +31,7 @@ fi
 
 echo "✅ Starting server..."
 
-# Iniciar servidor con router personalizado (SIEMPRE se ejecuta)
-exec php -S 0.0.0.0:${PORT:-10000} -t /app/public /app/public/router.php
+# Iniciar servidor sin router - usar directamente el public directory
+# Symfony manejará el routing a través de index.php
+cd /app/public
+exec php -S 0.0.0.0:${PORT:-10000} index.php
