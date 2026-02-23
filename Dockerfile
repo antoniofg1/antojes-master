@@ -14,6 +14,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /app
 COPY . /app
 
+# Verificar que los archivos HTML se copiaron
+RUN echo "📂 Verificando archivos en /app/public:" && ls -la /app/public/*.html
+
 # Instalar dependencias PHP
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 

@@ -19,16 +19,27 @@ class HealthController extends AbstractController
         $dbConnected = false;
         
         try {
-            $userCount = $em->getRepository(User::class)->count([]);
+            // Intentar hacer una consulta simple
+            $connection = $em->getConnection();
+            $connection->executeQuery('SELECT 1');
             $dbConnected = true;
+            
+            // Si la conexión funciona, contar usuarios
+            try {
+                $userCount = $em->getRepository(User::class)->count([]);
+            } catch (\Exception $e) {
+                // La tabla puede no existir aún
+                $dbError = 'Database connected but tables may not exist: ' . $e->getMessage();
+            }
         } catch (\Exception $e) {
-            $dbError = $e->getMessage();
+            $dbError = 'Database connection failed: ' . $e->getMessage();
         }
         
         return new JsonResponse([
-            'status' => $dbConnected ? 'ok' : 'warning',
+            'status' => $dbConnected ? 'ok' : 'error',
             'timestamp' => time(),
             'server' => 'running',
+            'php_version' => phpversion(),
             'env' => [
                 'APP_ENV' => $_ENV['APP_ENV'] ?? 'not set',
                 'APP_API_KEY_SET' => isset($_ENV['APP_API_KEY']) ? 'yes' : 'no',

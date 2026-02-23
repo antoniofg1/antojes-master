@@ -30,6 +30,8 @@ else
 fi
 
 echo "✅ Starting server..."
+echo "📂 Listing public directory:"
+ls -la /app/public/*.html 2>/dev/null || echo "No HTML files found"
 
 # Iniciar servidor con router simplificado
 exec php -S 0.0.0.0:${PORT:-10000} -t /app/public /app/public/router.php
